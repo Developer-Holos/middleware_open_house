@@ -32,4 +32,11 @@ def validate_stage_kommo(lead_id):
 
     status_id = data.get("status_id")
     pipeline_id = data.get("pipeline_id")
-    return status_id == 96182344 and pipeline_id == 12451224
+    
+    print(f"📊 Lead {lead_id} - Status ID actual: {status_id}, Pipeline ID actual: {pipeline_id}", flush=True)
+    print(f"🎯 Status ID esperado: 96182344, Pipeline ID esperado: 12451224", flush=True)
+    
+    is_valid = status_id == 96182344 and pipeline_id == 12451224
+    print(f"{'✅' if is_valid else '❌'} Validación: {is_valid}", flush=True)
+    
+    return is_valid

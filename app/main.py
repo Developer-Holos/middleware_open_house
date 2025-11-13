@@ -46,16 +46,25 @@ async def webhook(request: Request):
         msg = data["message"]["add"][0]
         lead_id = int(msg["entity_id"])
 
+        print(f"\n🔍 Validando etapa para lead_id: {lead_id}", flush=True)
         try:
             is_valid = validate_stage_kommo(lead_id)
+            print(f"✅ Resultado de validación: {is_valid}", flush=True)
+            print(f"✅ Resultado de validación: {is_valid}", flush=True)
             if not is_valid:
+                print(f"❌ Lead {lead_id} NO está en la etapa permitida. Abortando.", flush=True)
                 return {"status": "error", "message": "Lead no está en la etapa o pipeline permitidos."}
         except Exception as e:
+            print(f"❌ Error validando etapa: {e}", flush=True)
             return {"status": "error", "message": f"Error validando etapa Kommo: {e}"}
 
+        print(f"\n📋 Procesando datos del request...", flush=True)
         processed = await process_request_data(data)
+        print(f"✅ Datos procesados - Lead: {processed['lead_id']}, Texto: '{processed['text']}'", flush=True)
         
+        print(f"\n🚀 Llamando a add_message...", flush=True)
         add_message_result = add_message(processed["lead_id"], processed["text"])
+        print(f"📥 Resultado de add_message: {add_message_result}", flush=True)
         if add_message_result["status"] == "error":
             return add_message_result
         else:
